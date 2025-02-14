@@ -1,0 +1,17 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.filterArea {
+  display: grid;
+  grid-template-columns: 25vw 75vw;
+}
+.productArea {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 5px;
+  padding: 5px;
+}
