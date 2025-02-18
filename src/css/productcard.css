@@ -38,7 +38,7 @@
 
 .slick-prev:before,
 .slick-next:before {
-  color: #007bff;
+  color: gray;
   z-index: 100;
 }
 
@@ -49,4 +49,20 @@
 .slick-prev {
   left: 0;
   z-index: 100;
+}
+
+.product-card .slick-prev {
+  visibility: hidden;
+}
+
+.product-card:hover .slick-prev {
+  visibility: visible;
+}
+
+.product-card .slick-next {
+  visibility: hidden;
+}
+
+.product-card:hover .slick-next {
+  visibility: visible;
 }

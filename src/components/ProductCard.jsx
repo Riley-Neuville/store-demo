@@ -1,11 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "../css/productcard.css"; // Custom styles
+import "../css/productcard.css";
 
-const ProductCard = ({ images, title, price }) => {
-  // Slick carousel settings
+const ProductCard = ({ id, images, title, price }) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -16,26 +16,25 @@ const ProductCard = ({ images, title, price }) => {
   };
 
   return (
-    <div className="product-card">
-      {/* Image Carousel */}
-      <Slider {...settings} className="product-carousel">
-        {images.map((img, index) => (
-          <div key={index}>
-            <img
-              src={img}
-              alt={`${title} ${index + 1}`}
-              className="product-image"
-            />
-          </div>
-        ))}
-      </Slider>
-
-      {/* Product Info */}
-      <div className="product-info">
-        <h3 className="product-title">{title}</h3>
-        <p className="product-price">${price.toFixed(2)}</p>
+    <Link to={`/product/${id}`} className="product-card-link">
+      <div className="product-card">
+        <Slider {...settings} className="product-carousel">
+          {images.map((img, index) => (
+            <div key={index}>
+              <img
+                src={img}
+                alt={`${title} ${index + 1}`}
+                className="product-image"
+              />
+            </div>
+          ))}
+        </Slider>
+        <div className="product-info">
+          <h3 className="product-title">{title}</h3>
+          <p className="product-price">${price.toFixed(2)}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
