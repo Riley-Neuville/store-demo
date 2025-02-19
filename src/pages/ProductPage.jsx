@@ -1,8 +1,22 @@
 import { useParams, Link } from "react-router-dom";
+import "../css/productpage.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "../css/productcard.css";
 
 function ProductPage({ products }) {
   const { id } = useParams(); // Get product ID from URL
   const product = products.find((p) => p.id === id);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
 
   if (!product) {
     return <h2>Product not found</h2>;
@@ -11,11 +25,15 @@ function ProductPage({ products }) {
   return (
     <div className="productPage">
       <h1>{product.title}</h1>
+      <br></br>
       <div className="imageGallery">
-        {product.images.map((img, index) => (
-          <img key={index} src={img} alt={`${product.title} ${index + 1}`} />
-        ))}
+        <Slider {...settings} className="singleProductSlider">
+          {product.images.map((img, index) => (
+            <img key={index} src={img} alt={`${product.title} ${index + 1}`} />
+          ))}
+        </Slider>
       </div>
+      <br></br>
       <p>
         <strong>Price:</strong> ${product.price.toFixed(2)}
       </p>

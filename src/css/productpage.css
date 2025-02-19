@@ -1,0 +1,26 @@
+.productPage {
+  margin: auto;
+  text-align: center;
+  height: 75vh;
+}
+
+.imageGallery {
+  width: 100%;
+  max-height: 75vh;
+  max-width: 75vw;
+  margin: auto;
+  overflow: hidden;
+}
+
+.singleProductSlider .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.singleProductSlider img {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+}
