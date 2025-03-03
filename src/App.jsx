@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import ProductPage from "./pages/ProductPage";
 import AllProductsPage from "./pages/allProductsPage";
 import Papa from "papaparse";
+import AddProductPage from "./pages/AddProductPage";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -43,6 +44,7 @@ function App() {
           path="/product/:id"
           element={<ProductPage products={products} />}
         />
+        <Route path="/add" element={<AddProductPage />} />
       </Routes>
     </Router>
   );

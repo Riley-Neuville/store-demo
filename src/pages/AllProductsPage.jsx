@@ -5,11 +5,21 @@ import Papa from "papaparse";
 import "../App.css";
 
 function AllProductsPage() {
+  const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [sortBy, setSortBy] = useState("");
+
+  const loadAllProducts = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/products/");
+      setAllProducts(response.data);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   useEffect(() => {
     fetch("MOCK_DATA(1).csv")
