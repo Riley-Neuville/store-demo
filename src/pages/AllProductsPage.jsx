@@ -1,54 +1,42 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import Papa from "papaparse";
 import "../App.css";
 
 function AllProductsPage() {
   const [allProducts, setAllProducts] = useState([]);
-  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const images = [
+    "http://dummyimage.com/112x148.png/ff4444/ffffff",
+    "http://dummyimage.com/177x112.png/ff4444/ffffff",
+    "http://dummyimage.com/201x147.png/5fa2dd/ffffff",
+  ];
   const loadAllProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/products/");
+      setLoading(true);
+      const response = await axios.get("http://localhost:8080/api/products");
+      console.log("API Response:", response.data); // Log the actual API response
       setAllProducts(response.data);
     } catch (error) {
+      console.error("Error fetching products:", error);
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
-
   useEffect(() => {
-    fetch("MOCK_DATA(1).csv")
-      .then((response) => response.text())
-      .then((csvText) => {
-        Papa.parse(csvText, {
-          header: true, // Treat first row as headers
-          skipEmptyLines: true,
-          complete: (result) => {
-            const formattedProducts = result.data.map((product) => ({
-              id: product.id,
-              title: product.product_title,
-              price: parseFloat(product.price),
-              images: [product.image1, product.image2, product.image3].filter(
-                (img) => img // Remove empty image values
-              ),
-              color: product.color,
-              department: product.department,
-            }));
-            setProducts(formattedProducts);
-            setFilteredProducts(formattedProducts);
-          },
-        });
-      })
-      .catch((error) => console.error("Error loading CSV:", error));
+    loadAllProducts();
   }, []);
 
   useEffect(() => {
-    let filtered = products;
+    let filtered = allProducts;
 
     if (selectedColor) {
       filtered = filtered.filter((product) => product.color === selectedColor);
@@ -65,15 +53,15 @@ function AllProductsPage() {
     } else if (sortBy === "price-high-low") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
     } else if (sortBy === "alphabetical") {
-      filtered = [...filtered].sort((a, b) => a.title.localeCompare(b.title));
+      filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     setFilteredProducts(filtered);
-  }, [selectedColor, selectedDepartment, sortBy, products]);
+  }, [selectedColor, selectedDepartment, sortBy, allProducts]);
 
   // Get unique color and department options
-  const colorOptions = [...new Set(products.map((p) => p.color))];
-  const departmentOptions = [...new Set(products.map((p) => p.department))];
+  const colorOptions = [...new Set(allProducts.map((p) => p.color))];
+  const departmentOptions = [...new Set(allProducts.map((p) => p.department))];
 
   return (
     <>
@@ -124,15 +112,15 @@ function AllProductsPage() {
           {filteredProducts.length === 0 ? (
             <p>Loading products...</p>
           ) : (
-            filteredProducts.map((product) => (
+            filteredProducts.map((allProducts) => (
               <ProductCard
-                key={product.id}
-                id={product.id}
-                images={product.images}
-                title={product.title}
-                price={product.price}
-                color={product.color}
-                department={product.department}
+                key={allProducts.id}
+                id={allProducts.id}
+                images={images}
+                title={allProducts.name}
+                price={allProducts.price}
+                color={allProducts.color}
+                department={allProducts.department}
               />
             ))
           )}
