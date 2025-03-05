@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import "../App.css";
 
@@ -10,47 +10,48 @@ function AddProductPage() {
     department: "",
   });
 
+  const [message, setMessage] = useState(null); // Message state for success/error feedback
+  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+
   const handleAddProduct = async () => {
     try {
       console.log("Sending product data:", newProduct);
 
-      // Make sure you're using the exact same URL path as defined in your controller
       const response = await axios.post(
         "http://localhost:8080/api/createResource",
         newProduct,
         {
           headers: {
             "Content-Type": "application/json",
-            // Remove any other headers that might be causing issues
           },
-          withCredentials: true, // Keep this if you're using authentication
+          withCredentials: true,
         }
       );
 
       console.log("Response received:", response.data);
-      // Handle success response
+
+      // Show success message and clear input fields
+      setMessage("Product added successfully!");
+      setMessageType("success");
+      setNewProduct({ name: "", price: "", color: "", department: "" });
     } catch (error) {
-      // More detailed error logging
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("Error response:", {
-          data: error.response.data,
-          status: error.response.status,
-          headers: error.response.headers,
-        });
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("No response received:", error.request);
-      } else {
-        // Something happened in setting up the request
-        console.error("Error setting up request:", error.message);
-      }
+      console.error("Error adding product:", error);
+
+      // Show error message
+      setMessage("Failed to add product. Please try again.");
+      setMessageType("error");
     }
+
+    // Clear message after 3 seconds
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
   };
 
   return (
     <div className="AddProductPage">
+      {message && <p className={`message ${messageType}`}>{message}</p>}
+
       <input
         type="text"
         placeholder="Add Product Name"
@@ -86,7 +87,32 @@ function AddProductPage() {
           setNewProduct({ ...newProduct, department: e.target.value })
         }
       />
+
       <button onClick={handleAddProduct}>Add Product</button>
+
+      {/* Inline CSS for success/error message */}
+      <style>
+        {`
+          .message {
+            font-size: 1rem;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-align: center;
+            width: 75%;
+          }
+          .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+          }
+          .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+          }
+        `}
+      </style>
     </div>
   );
 }

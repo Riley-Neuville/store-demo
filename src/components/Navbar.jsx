@@ -6,23 +6,23 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container">
         {/* Logo */}
-        <a href="#" className="logo">
+        <a href="/" className="logo">
           MyWebsite
         </a>
 
         {/* Navigation Links */}
         <ul className="nav-links">
           <li>
-            <a href="#">Home</a>
+            <a href="/">Home</a>
           </li>
           <li>
-            <a href="#">About</a>
+            <a href="/">About</a>
           </li>
           <li>
             <a href="/add">Add Product</a>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <a href="/">Contact</a>
           </li>
         </ul>
       </div>
